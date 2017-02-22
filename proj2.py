@@ -66,14 +66,16 @@ print("UMSI faculty directory emails\n")
 ### Your Problem 4 solution goes here
 
 def in_page(link):
-	page = request.urlopen(link).read()
+	req = request.Request(link, None, {'User-Agent': 'SI_CLASS'})
+	page = request.urlopen(req).read()
 	page_soup = BeautifulSoup(page, 'lxml')
 	email_lst = []
 	for div in page_soup.find_all('div'):
 		if div.get('class'):
 			if "field-name-contact-details" in div.get('class'):
 				node = div.a.get('href')
-				contact = request.urlopen('https://www.si.umich.edu'+node).read()
+				contact_req = request.Request('https://www.si.umich.edu'+node, None, {'User-Agent': 'SI_CLASS'})
+				contact = request.urlopen(contact_req).read()
 				contact_soup = BeautifulSoup(contact, 'lxml')
 				for div in contact_soup.find_all('div'):
 					if div.get('class'):
